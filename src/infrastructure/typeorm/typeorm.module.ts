@@ -13,7 +13,7 @@ import { EnvironmentConfigModule } from "../config/environment-config.module";
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [join(__dirname, "**", "*.entity.{ts,js}")],
+      entities: [__dirname + "/../**/*.entity.js"],
       synchronize: true,
     }),
   ],

@@ -11,9 +11,9 @@ export class Conductor {
   @Column({ type: "boolean", nullable: false })
   isAvailable: boolean;
 
-  @Column({ type: "decimal", precision: 10, scale: 8, nullable: false })
+  @Column({ type: "decimal", precision: 20, scale: 17, nullable: false })
   latitude: number;
 
-  @Column({ type: "decimal", precision: 11, scale: 8, nullable: false })
+  @Column({ type: "decimal", precision: 20, scale: 17, nullable: false })
   longitude: number;
 }
