@@ -1,28 +1,24 @@
 import { Controller, Get, Inject, Param, Query } from "@nestjs/common";
 import { ConductorService } from "src/application/services/conductor.service";
-import { ConductorModel } from "src/domain/models/conductor.model";
+import { PasajeroService } from "src/application/services/pasajero.service";
 import { ServicesProxyModule } from "src/infrastructure/services-proxy/services-proxy.module";
 
-@Controller("conductores")
-export class ConductoresController {
+@Controller("pasajeros")
+export class PasajerosController {
   constructor(
+    @Inject(ServicesProxyModule.PASAJERO_SERVICE)
+    private readonly pasajeroService: PasajeroService,
     @Inject(ServicesProxyModule.CONDUCTOR_SERVICE)
     private readonly conductorService: ConductorService,
   ) {}
 
   @Get()
   async getAll() {
-    const drivers = await this.conductorService.getAllDrivers();
-    return drivers;
+    const passengers = await this.pasajeroService.getAllPassengers();
+    return passengers;
   }
 
-  @Get("disponibles")
-  async getAvailableDrivers() {
-    const drivers = await this.conductorService.getAvailableDrivers();
-    return drivers;
-  }
-
-  @Get("cercanos-disponibles")
+  @Get("conductores-cercanos")
   async getDriversWithin3Km(
     @Query("latitud") latitude: number,
     @Query("longitud") longitude: number,
@@ -33,6 +29,7 @@ export class ConductoresController {
     const drivers = await this.conductorService.getClosestDrivers(
       latitude,
       longitude,
+      undefined,
       3,
     );
     return drivers;
@@ -40,7 +37,7 @@ export class ConductoresController {
 
   @Get(":id")
   async getById(@Param("id") id: number) {
-    const driver = await this.conductorService.getDriverById(id);
-    return driver;
+    const passenger = await this.pasajeroService.getPassengerById(id);
+    return passenger;
   }
 }

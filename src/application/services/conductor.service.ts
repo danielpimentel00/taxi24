@@ -19,13 +19,15 @@ export class ConductorService {
     return await this.conductorRepository.findAvailableDrivers();
   }
 
-  async getDriversWithin3Km(
+  async getClosestDrivers(
     latitude: number,
     longitude: number,
+    maxDistance?: number,
+    limit?: number,
   ): Promise<ConductorDto[]> {
-    const drivers = await this.conductorRepository.findAll();
+    const drivers = await this.conductorRepository.findAvailableDrivers();
 
-    const driversWithin3Km = drivers
+    let filteredDrivers = drivers
       .map((driver) => {
         const distance = this.calculateDistance(
           latitude,
@@ -35,10 +37,42 @@ export class ConductorService {
         );
         return this.toConductorDto(driver, parseFloat(distance.toFixed(2)));
       })
-      .filter((driver) => driver.distance <= 3);
+      .sort((a, b) => a.distance - b.distance);
 
-    return driversWithin3Km;
+    if (maxDistance !== undefined) {
+      filteredDrivers = filteredDrivers.filter(
+        (driver) => driver.distance <= maxDistance,
+      );
+    }
+
+    if (limit !== undefined) {
+      filteredDrivers = filteredDrivers.slice(0, limit);
+    }
+
+    return filteredDrivers;
   }
+
+  // async getDriversWithin3Km(
+  //   latitude: number,
+  //   longitude: number,
+  //   limit: number,
+  // ): Promise<ConductorDto[]> {
+  //   const drivers = await this.conductorRepository.findAll();
+
+  //   const driversWithin3Km = drivers
+  //     .map((driver) => {
+  //       const distance = this.calculateDistance(
+  //         latitude,
+  //         longitude,
+  //         driver.latitude,
+  //         driver.longitude,
+  //       );
+  //       return this.toConductorDto(driver, parseFloat(distance.toFixed(2)));
+  //     })
+  //     .filter((driver) => driver.distance <= 3);
+
+  //   return driversWithin3Km;
+  // }
 
   private calculateDistance(
     lat1: number,
