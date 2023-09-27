@@ -18,11 +18,15 @@ export class ConductorRepository implements IConductorRepository {
   }
 
   async findAvailableDrivers(): Promise<ConductorModel[]> {
-    throw new Error("Method not implemented.");
+    const drivers = await this.conductorRepository.findBy({
+      isAvailable: true,
+    });
+    return drivers.map((driver) => this.toConductorModel(driver));
   }
 
   async findById(id: number): Promise<ConductorModel> {
-    throw new Error("Method not implemented.");
+    const driver = await this.conductorRepository.findOneBy({ id });
+    return this.toConductorModel(driver);
   }
 
   private toConductorModel(conductorEntity: Conductor): ConductorModel {
