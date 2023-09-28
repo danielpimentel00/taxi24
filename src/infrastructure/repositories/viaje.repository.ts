@@ -34,7 +34,7 @@ export class ViajeRepository implements IViajeRepository {
       .createQueryBuilder("viaje")
       .leftJoinAndSelect("viaje.conductor", "conductor")
       .leftJoinAndSelect("viaje.pasajero", "pasajero")
-      .where("viaje.isActive = :id", { id: tripId })
+      .where("viaje.id = :id", { id: tripId })
       .getOne();
 
     trip.isActive = false;
@@ -53,7 +53,6 @@ export class ViajeRepository implements IViajeRepository {
       .getMany();
 
     return trips.map((trip) => {
-      console.log(trip);
       return this.toViajeModel(trip);
     });
   }
@@ -87,7 +86,7 @@ export class ViajeRepository implements IViajeRepository {
     viajeModel.idConductor = viajeEntity.conductor.id;
     viajeModel.idPasajero = viajeEntity.pasajero.id;
     viajeModel.isActive = viajeEntity.isActive;
-    viajeModel.monto = viajeEntity.monto;
+    viajeModel.monto = Number(viajeEntity.monto);
 
     return viajeModel;
   }

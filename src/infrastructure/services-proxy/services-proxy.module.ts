@@ -6,6 +6,7 @@ import { PasajeroService } from "src/application/services/pasajero.service";
 import { PasajeroRepository } from "../repositories/pasajero.repository";
 import { ViajeRepository } from "../repositories/viaje.repository";
 import { ViajeService } from "src/application/services/viaje.service";
+import { FacturaRepository } from "../repositories/factura.repository";
 
 @Module({
   imports: [RepositoriesModule],
@@ -32,10 +33,12 @@ export class ServicesProxyModule {
             new PasajeroService(pasajeroRepository),
         },
         {
-          inject: [ViajeRepository],
+          inject: [ViajeRepository, FacturaRepository],
           provide: this.VIAJE_SERVICE,
-          useFactory: (viajeRepository: ViajeRepository) =>
-            new ViajeService(viajeRepository),
+          useFactory: (
+            viajeRepository: ViajeRepository,
+            facturaRepository: FacturaRepository,
+          ) => new ViajeService(viajeRepository, facturaRepository),
         },
       ],
       exports: [
