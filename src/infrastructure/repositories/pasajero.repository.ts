@@ -3,7 +3,7 @@ import { PasajeroModel } from "src/domain/models/pasajero.model";
 import { IPasajeroRepository } from "src/domain/repositories/pasajero-repository.interface";
 import { Pasajero } from "../entities/pasajero.entity";
 import { Repository } from "typeorm";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 
 @Injectable()
 export class PasajeroRepository implements IPasajeroRepository {
@@ -19,6 +19,11 @@ export class PasajeroRepository implements IPasajeroRepository {
 
   async findById(id: number): Promise<PasajeroModel> {
     const passenger = await this.pasajeroRepository.findOneBy({ id });
+
+    if (!passenger)
+      throw new NotFoundException(
+        `No existe un pasajero registrado con id: ${id}`,
+      );
     return this.toPasajeroModel(passenger);
   }
 

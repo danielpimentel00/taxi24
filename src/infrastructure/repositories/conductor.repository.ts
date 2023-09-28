@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { IConductorRepository } from "src/domain/repositories/conductor-repository.interface";
 import { Conductor } from "../entities/conductor.entity";
@@ -26,6 +26,11 @@ export class ConductorRepository implements IConductorRepository {
 
   async findById(id: number): Promise<ConductorModel> {
     const driver = await this.conductorRepository.findOneBy({ id });
+
+    if (!driver)
+      throw new NotFoundException(
+        `No existe un conductor registrado con id: ${id}`,
+      );
     return this.toConductorModel(driver);
   }
 

@@ -1,9 +1,14 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
   Inject,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
 } from "@nestjs/common";
@@ -13,6 +18,8 @@ import { ServicesProxyModule } from "src/infrastructure/services-proxy/services-
 
 @Controller("viajes")
 export class ViajesController {
+  private readonly logger = new Logger(ViajesController.name);
+
   constructor(
     @Inject(ServicesProxyModule.VIAJE_SERVICE)
     private readonly viajeService: ViajeService,
@@ -20,19 +27,41 @@ export class ViajesController {
 
   @Post()
   async createTrip(@Body() model: ViajeModel) {
-    const result = await this.viajeService.createTrip(model);
-    return result;
+    try {
+      const result = await this.viajeService.createTrip(model);
+      return result;
+    } catch (error) {
+      this.logger.error(error);
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new InternalServerErrorException("Error en el servidor");
+    }
   }
 
   @Get("activos")
   async getActiveTrips() {
-    const result = await this.viajeService.getActiveTrips();
-    return result;
+    try {
+      const result = await this.viajeService.getActiveTrips();
+      return result;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException("Error en el servidor");
+    }
   }
 
   @Patch("complete-trip/:tripId")
-  async completeTrip(@Param("tripId") tripId: number) {
-    const result = await this.viajeService.completeTrip(tripId);
-    return result;
+  async completeTrip(@Param("tripId", ParseIntPipe) tripId: number) {
+    try {
+      const result = await this.viajeService.completeTrip(tripId);
+      return result;
+    } catch (error) {
+      this.logger.error(error);
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException("Error en el servidor");
+    }
   }
 }

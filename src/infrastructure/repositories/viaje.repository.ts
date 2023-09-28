@@ -1,4 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ViajeModel } from "src/domain/models/viaje.model";
 import { IViajeRepository } from "src/domain/repositories/viaje-repository.interface";
@@ -37,6 +41,8 @@ export class ViajeRepository implements IViajeRepository {
       .where("viaje.id = :id", { id: tripId })
       .getOne();
 
+    if (!trip) throw new NotFoundException("Viaje no encontrado");
+
     trip.isActive = false;
     await this.viajeRepository.save(trip);
 
@@ -63,12 +69,12 @@ export class ViajeRepository implements IViajeRepository {
     const conductor = await this.conductorRepository.findOneBy({
       id: viajeModel.idConductor,
     });
-    if (!conductor) throw new Error("Conductor no encontrado");
+    if (!conductor) throw new BadRequestException("idConductor inválido");
 
     const pasajero = await this.pasajeroRepository.findOneBy({
       id: viajeModel.idPasajero,
     });
-    if (!pasajero) throw new Error("Pasajero no encontrado");
+    if (!pasajero) throw new BadRequestException("idPasajero inválido");
 
     viajeEntity.id = viajeModel.id;
     viajeEntity.conductor = conductor;

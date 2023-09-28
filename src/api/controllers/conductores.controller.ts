@@ -1,10 +1,23 @@
-import { Controller, Get, Inject, Param, Query } from "@nestjs/common";
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Inject,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+  Param,
+  ParseFloatPipe,
+  ParseIntPipe,
+  Query,
+} from "@nestjs/common";
 import { ConductorService } from "src/application/services/conductor.service";
-import { ConductorModel } from "src/domain/models/conductor.model";
 import { ServicesProxyModule } from "src/infrastructure/services-proxy/services-proxy.module";
 
 @Controller("conductores")
 export class ConductoresController {
+  private readonly logger = new Logger(ConductoresController.name);
+
   constructor(
     @Inject(ServicesProxyModule.CONDUCTOR_SERVICE)
     private readonly conductorService: ConductorService,
@@ -12,35 +25,57 @@ export class ConductoresController {
 
   @Get()
   async getAll() {
-    const drivers = await this.conductorService.getAllDrivers();
-    return drivers;
+    try {
+      const drivers = await this.conductorService.getAllDrivers();
+      return drivers;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException("Error en el servidor");
+    }
   }
 
   @Get("disponibles")
   async getAvailableDrivers() {
-    const drivers = await this.conductorService.getAvailableDrivers();
-    return drivers;
+    try {
+      const drivers = await this.conductorService.getAvailableDrivers();
+      return drivers;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException("Error en el servidor");
+    }
   }
 
   @Get("cercanos-disponibles")
   async getDriversWithin3Km(
-    @Query("latitud") latitude: number,
-    @Query("longitud") longitude: number,
+    @Query("latitud", ParseFloatPipe) latitude: number,
+    @Query("longitud", ParseFloatPipe) longitude: number,
   ) {
-    if (!latitude) throw new Error("Bad Request");
-    if (!longitude) throw new Error("Bad Request");
-
-    const drivers = await this.conductorService.getClosestDrivers(
-      latitude,
-      longitude,
-      3,
-    );
-    return drivers;
+    try {
+      const drivers = await this.conductorService.getClosestDrivers(
+        latitude,
+        longitude,
+        3,
+      );
+      return drivers;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException("Error en el servidor");
+    }
   }
 
   @Get(":id")
-  async getById(@Param("id") id: number) {
-    const driver = await this.conductorService.getDriverById(id);
-    return driver;
+  async getById(@Param("id", ParseIntPipe) id: number) {
+    try {
+      const driver = await this.conductorService.getDriverById(id);
+      return driver;
+    } catch (error) {
+      this.logger.error(error);
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException("Error en el servidor");
+    }
   }
 }

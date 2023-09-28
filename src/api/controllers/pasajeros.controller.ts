@@ -1,10 +1,23 @@
-import { Controller, Get, Inject, Param, Query } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Inject,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+  Param,
+  ParseFloatPipe,
+  ParseIntPipe,
+  Query,
+} from "@nestjs/common";
 import { ConductorService } from "src/application/services/conductor.service";
 import { PasajeroService } from "src/application/services/pasajero.service";
 import { ServicesProxyModule } from "src/infrastructure/services-proxy/services-proxy.module";
 
 @Controller("pasajeros")
 export class PasajerosController {
+  private readonly logger = new Logger(PasajerosController.name);
+
   constructor(
     @Inject(ServicesProxyModule.PASAJERO_SERVICE)
     private readonly pasajeroService: PasajeroService,
@@ -14,30 +27,46 @@ export class PasajerosController {
 
   @Get()
   async getAll() {
-    const passengers = await this.pasajeroService.getAllPassengers();
-    return passengers;
+    try {
+      const passengers = await this.pasajeroService.getAllPassengers();
+      return passengers;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException("Error en el servidor");
+    }
   }
 
   @Get("conductores-cercanos")
   async getClosestDrivers(
-    @Query("latitud") latitude: number,
-    @Query("longitud") longitude: number,
+    @Query("latitud", ParseFloatPipe) latitude: number,
+    @Query("longitud", ParseFloatPipe) longitude: number,
   ) {
-    if (!latitude) throw new Error("Bad Request");
-    if (!longitude) throw new Error("Bad Request");
-
-    const drivers = await this.conductorService.getClosestDrivers(
-      latitude,
-      longitude,
-      undefined,
-      3,
-    );
-    return drivers;
+    try {
+      const drivers = await this.conductorService.getClosestDrivers(
+        latitude,
+        longitude,
+        undefined,
+        3,
+      );
+      return drivers;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException("Error en el servidor");
+    }
   }
 
   @Get(":id")
-  async getById(@Param("id") id: number) {
-    const passenger = await this.pasajeroService.getPassengerById(id);
-    return passenger;
+  async getById(@Param("id", ParseIntPipe) id: number) {
+    try {
+      const passenger = await this.pasajeroService.getPassengerById(id);
+      return passenger;
+    } catch (error) {
+      this.logger.error(error);
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException("Error en el servidor");
+    }
   }
 }
