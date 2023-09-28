@@ -19,7 +19,7 @@ export class PasajerosController {
   }
 
   @Get("conductores-cercanos")
-  async getDriversWithin3Km(
+  async getClosestDrivers(
     @Query("latitud") latitude: number,
     @Query("longitud") longitude: number,
   ) {

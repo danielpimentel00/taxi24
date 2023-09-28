@@ -4,6 +4,8 @@ import { ConductorService } from "src/application/services/conductor.service";
 import { RepositoriesModule } from "../repositories/repositories.module";
 import { PasajeroService } from "src/application/services/pasajero.service";
 import { PasajeroRepository } from "../repositories/pasajero.repository";
+import { ViajeRepository } from "../repositories/viaje.repository";
+import { ViajeService } from "src/application/services/viaje.service";
 
 @Module({
   imports: [RepositoriesModule],
@@ -11,6 +13,7 @@ import { PasajeroRepository } from "../repositories/pasajero.repository";
 export class ServicesProxyModule {
   static CONDUCTOR_SERVICE = "ConductorService";
   static PASAJERO_SERVICE = "PasajeroService";
+  static VIAJE_SERVICE = "ViajeService";
 
   static register(): DynamicModule {
     return {
@@ -28,8 +31,18 @@ export class ServicesProxyModule {
           useFactory: (pasajeroRepository: PasajeroRepository) =>
             new PasajeroService(pasajeroRepository),
         },
+        {
+          inject: [ViajeRepository],
+          provide: this.VIAJE_SERVICE,
+          useFactory: (viajeRepository: ViajeRepository) =>
+            new ViajeService(viajeRepository),
+        },
       ],
-      exports: [this.CONDUCTOR_SERVICE, this.PASAJERO_SERVICE],
+      exports: [
+        this.CONDUCTOR_SERVICE,
+        this.PASAJERO_SERVICE,
+        this.VIAJE_SERVICE,
+      ],
     };
   }
 }
