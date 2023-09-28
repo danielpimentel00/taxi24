@@ -30,7 +30,11 @@ export class ConductoresController {
       return drivers;
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException("Error en el servidor");
+
+      if (error instanceof InternalServerErrorException)
+        throw new InternalServerErrorException("Error en el servidor");
+
+      throw error;
     }
   }
 
@@ -41,11 +45,15 @@ export class ConductoresController {
       return drivers;
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException("Error en el servidor");
+
+      if (error instanceof InternalServerErrorException)
+        throw new InternalServerErrorException("Error en el servidor");
+
+      throw error;
     }
   }
 
-  @Get("cercanos-disponibles")
+  @Get("disponibles/cercanos")
   async getDriversWithin3Km(
     @Query("latitud", ParseFloatPipe) latitude: number,
     @Query("longitud", ParseFloatPipe) longitude: number,
@@ -59,7 +67,11 @@ export class ConductoresController {
       return drivers;
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException("Error en el servidor");
+
+      if (error instanceof InternalServerErrorException)
+        throw new InternalServerErrorException("Error en el servidor");
+
+      throw error;
     }
   }
 
@@ -71,11 +83,10 @@ export class ConductoresController {
     } catch (error) {
       this.logger.error(error);
 
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
+      if (error instanceof InternalServerErrorException)
+        throw new InternalServerErrorException("Error en el servidor");
 
-      throw new InternalServerErrorException("Error en el servidor");
+      throw error;
     }
   }
 }

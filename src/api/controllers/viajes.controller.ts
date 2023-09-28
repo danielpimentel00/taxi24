@@ -32,10 +32,11 @@ export class ViajesController {
       return result;
     } catch (error) {
       this.logger.error(error);
-      if (error instanceof BadRequestException) {
-        throw error;
-      }
-      throw new InternalServerErrorException("Error en el servidor");
+
+      if (error instanceof InternalServerErrorException)
+        throw new InternalServerErrorException("Error en el servidor");
+
+      throw error;
     }
   }
 
@@ -46,7 +47,11 @@ export class ViajesController {
       return result;
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException("Error en el servidor");
+
+      if (error instanceof InternalServerErrorException)
+        throw new InternalServerErrorException("Error en el servidor");
+
+      throw error;
     }
   }
 
@@ -58,10 +63,10 @@ export class ViajesController {
     } catch (error) {
       this.logger.error(error);
 
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new InternalServerErrorException("Error en el servidor");
+      if (error instanceof InternalServerErrorException)
+        throw new InternalServerErrorException("Error en el servidor");
+
+      throw error;
     }
   }
 }

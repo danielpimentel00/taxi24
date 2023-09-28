@@ -32,7 +32,11 @@ export class PasajerosController {
       return passengers;
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException("Error en el servidor");
+
+      if (error instanceof InternalServerErrorException)
+        throw new InternalServerErrorException("Error en el servidor");
+
+      throw error;
     }
   }
 
@@ -51,7 +55,11 @@ export class PasajerosController {
       return drivers;
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException("Error en el servidor");
+
+      if (error instanceof InternalServerErrorException)
+        throw new InternalServerErrorException("Error en el servidor");
+
+      throw error;
     }
   }
 
@@ -63,10 +71,10 @@ export class PasajerosController {
     } catch (error) {
       this.logger.error(error);
 
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      throw new InternalServerErrorException("Error en el servidor");
+      if (error instanceof InternalServerErrorException)
+        throw new InternalServerErrorException("Error en el servidor");
+
+      throw error;
     }
   }
 }
