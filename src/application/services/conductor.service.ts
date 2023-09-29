@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { ConductorDto } from "src/domain/DTO/conductor.dto";
-import { ConductorModel } from "src/domain/models/conductor.model";
-import { IConductorRepository } from "src/domain/repositories/conductor-repository.interface";
+import { IConductorRepository } from "../../domain/repositories/conductor-repository.interface";
+import { ConductorModel } from "../../domain/models/conductor.model";
+import { ConductorDto } from "../../domain/DTO/conductor.dto";
 
 @Injectable()
 export class ConductorService {
@@ -51,28 +51,6 @@ export class ConductorService {
 
     return filteredDrivers;
   }
-
-  // async getDriversWithin3Km(
-  //   latitude: number,
-  //   longitude: number,
-  //   limit: number,
-  // ): Promise<ConductorDto[]> {
-  //   const drivers = await this.conductorRepository.findAll();
-
-  //   const driversWithin3Km = drivers
-  //     .map((driver) => {
-  //       const distance = this.calculateDistance(
-  //         latitude,
-  //         longitude,
-  //         driver.latitude,
-  //         driver.longitude,
-  //       );
-  //       return this.toConductorDto(driver, parseFloat(distance.toFixed(2)));
-  //     })
-  //     .filter((driver) => driver.distance <= 3);
-
-  //   return driversWithin3Km;
-  // }
 
   private calculateDistance(
     lat1: number,

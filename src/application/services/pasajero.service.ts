@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { PasajeroModel } from "src/domain/models/pasajero.model";
-import { IPasajeroRepository } from "src/domain/repositories/pasajero-repository.interface";
+import { IPasajeroRepository } from "../../domain/repositories/pasajero-repository.interface";
+import { PasajeroModel } from "../../domain/models/pasajero.model";
 
 @Injectable()
 export class PasajeroService {

@@ -12,9 +12,9 @@ import {
   Patch,
   Post,
 } from "@nestjs/common";
-import { ViajeService } from "src/application/services/viaje.service";
-import { ViajeModel } from "src/domain/models/viaje.model";
-import { ServicesProxyModule } from "src/infrastructure/services-proxy/services-proxy.module";
+import { ServicesProxyModule } from "../../infrastructure/services-proxy/services-proxy.module";
+import { ViajeService } from "../../application/services/viaje.service";
+import { ViajeModel } from "../../domain/models/viaje.model";
 
 @Controller("viajes")
 export class ViajesController {

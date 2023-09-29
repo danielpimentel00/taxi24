@@ -1,8 +1,8 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { FacturaModel } from "src/domain/models/factura.model";
-import { IFacturaRepository } from "src/domain/repositories/factura-repository.interface";
 import { Factura } from "../entities/factura.entity";
 import { Repository } from "typeorm";
+import { IFacturaRepository } from "../../domain/repositories/factura-repository.interface";
+import { FacturaModel } from "../../domain/models/factura.model";
 
 export class FacturaRepository implements IFacturaRepository {
   constructor(

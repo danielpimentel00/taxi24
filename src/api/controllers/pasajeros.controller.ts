@@ -10,9 +10,9 @@ import {
   ParseIntPipe,
   Query,
 } from "@nestjs/common";
-import { ConductorService } from "src/application/services/conductor.service";
-import { PasajeroService } from "src/application/services/pasajero.service";
-import { ServicesProxyModule } from "src/infrastructure/services-proxy/services-proxy.module";
+import { ServicesProxyModule } from "../../infrastructure/services-proxy/services-proxy.module";
+import { PasajeroService } from "../../application/services/pasajero.service";
+import { ConductorService } from "../../application/services/conductor.service";
 
 @Controller("pasajeros")
 export class PasajerosController {

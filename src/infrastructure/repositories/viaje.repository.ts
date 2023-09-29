@@ -4,12 +4,12 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ViajeModel } from "src/domain/models/viaje.model";
-import { IViajeRepository } from "src/domain/repositories/viaje-repository.interface";
 import { Viaje } from "../entities/viaje.entity";
 import { Repository } from "typeorm";
 import { Conductor } from "../entities/conductor.entity";
 import { Pasajero } from "../entities/pasajero.entity";
+import { IViajeRepository } from "../../domain/repositories/viaje-repository.interface";
+import { ViajeModel } from "../../domain/models/viaje.model";
 
 @Injectable()
 export class ViajeRepository implements IViajeRepository {

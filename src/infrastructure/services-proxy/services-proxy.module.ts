@@ -1,12 +1,12 @@
 import { DynamicModule, Module } from "@nestjs/common";
 import { ConductorRepository } from "../repositories/conductor.repository";
-import { ConductorService } from "src/application/services/conductor.service";
 import { RepositoriesModule } from "../repositories/repositories.module";
-import { PasajeroService } from "src/application/services/pasajero.service";
 import { PasajeroRepository } from "../repositories/pasajero.repository";
 import { ViajeRepository } from "../repositories/viaje.repository";
-import { ViajeService } from "src/application/services/viaje.service";
 import { FacturaRepository } from "../repositories/factura.repository";
+import { ConductorService } from "../../application/services/conductor.service";
+import { PasajeroService } from "../../application/services/pasajero.service";
+import { ViajeService } from "../../application/services/viaje.service";
 
 @Module({
   imports: [RepositoriesModule],

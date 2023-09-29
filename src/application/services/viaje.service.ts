@@ -1,8 +1,8 @@
-import { CompleteTripDto } from "src/domain/DTO/complete-trip.dto";
-import { FacturaModel } from "src/domain/models/factura.model";
-import { ViajeModel } from "src/domain/models/viaje.model";
-import { IFacturaRepository } from "src/domain/repositories/factura-repository.interface";
-import { IViajeRepository } from "src/domain/repositories/viaje-repository.interface";
+import { CompleteTripDto } from "../../domain/DTO/complete-trip.dto";
+import { FacturaModel } from "../../domain/models/factura.model";
+import { ViajeModel } from "../../domain/models/viaje.model";
+import { IFacturaRepository } from "../../domain/repositories/factura-repository.interface";
+import { IViajeRepository } from "../../domain/repositories/viaje-repository.interface";
 
 export class ViajeService {
   constructor(

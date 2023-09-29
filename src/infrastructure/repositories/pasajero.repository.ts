@@ -1,9 +1,9 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { PasajeroModel } from "src/domain/models/pasajero.model";
-import { IPasajeroRepository } from "src/domain/repositories/pasajero-repository.interface";
 import { Pasajero } from "../entities/pasajero.entity";
 import { Repository } from "typeorm";
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { IPasajeroRepository } from "../../domain/repositories/pasajero-repository.interface";
+import { PasajeroModel } from "../../domain/models/pasajero.model";
 
 @Injectable()
 export class PasajeroRepository implements IPasajeroRepository {

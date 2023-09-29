@@ -11,8 +11,8 @@ import {
   ParseIntPipe,
   Query,
 } from "@nestjs/common";
-import { ConductorService } from "src/application/services/conductor.service";
-import { ServicesProxyModule } from "src/infrastructure/services-proxy/services-proxy.module";
+import { ServicesProxyModule } from "../../infrastructure/services-proxy/services-proxy.module";
+import { ConductorService } from "../../application/services/conductor.service";
 
 @Controller("conductores")
 export class ConductoresController {

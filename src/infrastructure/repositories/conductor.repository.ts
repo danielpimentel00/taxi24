@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { IConductorRepository } from "src/domain/repositories/conductor-repository.interface";
 import { Conductor } from "../entities/conductor.entity";
 import { Repository } from "typeorm";
-import { ConductorModel } from "src/domain/models/conductor.model";
+import { ConductorModel } from "../../domain/models/conductor.model";
 
 @Injectable()
 export class ConductorRepository implements IConductorRepository {
